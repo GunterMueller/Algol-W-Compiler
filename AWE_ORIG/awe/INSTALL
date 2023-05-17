@@ -1,0 +1,56 @@
+──────────────────────────────────────────────────────────────────────────
+INSTALLING AWE
+──────────────────────────────────────────────────────────────────────────
+
+
+Linux/Unix Requirements
+╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴
+
+Gnu C, Python 2, OCaml 4.05 or later, make, ar and the Boehm GC.
+
+In Debian or Ubuntu install the packages:
+
+      gcc ocaml-nox python2 binutils libgc-dev
+
+
+Windows Requirements
+╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴
+
+I recommend using the Windows 10 Linux Subsystem.
+
+Awe should compile under Cygwin unmodified, but Algol programs 
+will not have garbage collection for records.
+
+
+Building Awe
+──────────────────────────────────────────────────────────────────────────
+
+These are commands to compile and install Awe, to be run from within
+the "awe/" source code directory:
+
+make
+
+   This builds Awe, then performs a large number of automated tests on it.
+
+sudo make install
+
+   This installs Awe. 
+
+   The default destination is the standard "/usr/local" directories.
+   Edit Makefile if you do not want this.
+
+man awe
+
+   Learn how to run your new Algol W compiler.
+
+That's it, it should be that simple.
+
+
+──────────────────────────────────────────────────────────────────────────
+
+Feel free to ask me any questions. 
+My email address is in the distribution file.
+
+--Glyn Webster, 2012
+
+──────────────────────────────────────────────────────────────────────────

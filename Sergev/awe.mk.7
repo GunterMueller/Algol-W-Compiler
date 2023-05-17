@@ -1,0 +1,127 @@
+.TH AWE.MK 7 "2023-05-17" "awe.mk" "Awe compiler universal Makefile"
+.SH "NAME"
+awe.mk - all-purpose Makefile for Algol W programs
+.SH "DESCRIPTION"
+This \fBmake\fR include file contains targets to build, clean and
+distribute moderately complex Algol W programs, ones that contain
+multiple Algol and C source files and might require linking to
+external libraries.
+
+An Algol W program Makefile need only contain a few variable definitions
+naming the source files, followed by the line "\fBinclude awe.mk\fR".
+
+Note that include files are a GNU extension to Make, described in
+section 3.3 of the GNU Make manual.
+.SH "The targets provided by awe.mk"
+.TP
+.B build
+Build the program.
+.TP
+.B clean
+Clean away the temporary files. This only deletes files that \fBawe.mk\fR
+creates.
+.TP
+.B dist
+Pack your source files into a tar file for distribution.
+.SH "Variables to set for awe.mk"
+.TP
+.B PROGRAM
+the name of the executable (mandatory).
+.TP
+.B ALGOLW_SOURCES
+the Algol W source files, in order (mandatory).
+.TP
+.B C_SOURCES, C_INCLUDES
+C library files for external procedures, if any.
+.TP
+.B AWE_FLAGS, CFLAGS, LDLIBS
+flags to pass to the Awe and GCC compilers. Extra libraries to link to the
+executable. (The libraries required by the Awe runtime will always be
+linked.)
+.TP
+.B OTHER_FILES
+Additional files to include in the distribution tar file.
+(The source files above and your Makefile are always included.)
+.TP
+.B DISTNAME
+A name for the project. The default name is the name of the current
+working directory. The distribution file will have this as its
+basename, with a \fI.tar.gz\fR extension added. The distribution file will
+unpack to a directory with this name.
+.TP
+.B COMPILER_PATH
+A path to a directory containing Awe's compiler and runtime library
+files.  Set this to Awe's build directory to test Awe before
+installing it.  (This exists mainly for Awe's self testing.)
+.SH "C INTERFACE HEADERS"
+If the Algol program contains procedures with external references
+(c.f. section 5.3.2.4 of the \fIAlgol W Language Description\fR) then
+\fBawe.mk\fR will write prototypes for them to a temporary C include
+file. It is a good idea to include that file into your C source files
+to ensure you have all function interfaces right. The include file's
+name is the program name, followed by \fI.awe.h\fR.
+
+.nf
+    #include <awe.h>
+    #include "\fIPROGRAM\fR.awe.h"
+.fi
+
+\fIawe.txt\fR explains the C interface in more detail.
+.SH "EXAMPLES"
+The minimal Makefile looks like this:
+
+.nf
+    PROGRAM = mini
+    ALGOLW_SOURCES = mini.alw
+    include awe.mk
+.fi
+
+A typical Makefile using \fBawe.mk\fR might look like this:
+
+.nf
+    PROGRAM        = bugzapper
+    ALGOLW_SOURCES = BEGIN zap.alw bugzapper.alw END
+    C_SOURCES      = zap.c highvoltage.c
+    C_INCLUDES     = zap.h
+    OTHER_FILES    = README safety.txt
+    include awe.mk
+.fi
+
+This Makefile contains an additional target for testing its program, and
+a target to remove the test's temporary file. The \fIclean\fR target will be
+run in addition the one defined by \fBawe.mk\fR. Note that it needs to be
+followed by two colons for this to happen.
+
+.nf
+     PROGRAM        = parse
+     ALGOLW_SOURCES = parse.alw
+     OTHER_FILES    = expected.output README GRAMMAR
+
+     default: build
+
+     test: build
+         ./parse < GRAMMAR > actual.output
+         diff expected.output actual.output
+
+     clean::
+         rm -f actual.output
+
+     include awe.mk
+.fi
+.SH "PREREQUISITES"
+Awe, GNU Make, tar, sed
+.SH "FILES"
+/usr/local/include/awe.mk
+.SH "SEE ALSO"
+\fBawe\fR(1), \fBmake\fR(1), \fBtar\fR(1)
+
+/usr/local/share/doc/awe/awe.txt
+.SH "VERSION"
+2020 Version
+.SH "AUTHOR"
+Copyright 2017 by Glyn Webster.
+
+Awe is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License and Lesser GNU General 
+Public License as published by the Free Software Foundation, either 
+version 3 of the License, or (at your option) any later version.
